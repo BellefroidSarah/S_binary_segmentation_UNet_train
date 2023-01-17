@@ -60,7 +60,7 @@ class DatasetKfold(torch.utils.data.Dataset):
         tr = transforms.Resize(size=511, max_size=512)
         image_tensor = tr(image_tensor)
         mask_tensor = tr(mask_tensor)
-        if image_tensor.shape[1] > mask_tensor.shape[2]:
+        if image_tensor.shape[1] > image_tensor.shape[2]:
             padding = (image_tensor.shape[1] - image_tensor.shape[2]) / 2
             tr = transforms.Pad((ceil(padding), 0, floor(padding), 0))
         else:

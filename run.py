@@ -16,8 +16,6 @@ import sys
 import cv2
 import os
 
-import time
-
 
 def main(argv):
     with CytomineJob.from_cli(argv) as cj:
@@ -36,7 +34,7 @@ def main(argv):
         dataset_path = os.path.join(DIR, "dataset")
         images_path = os.path.join(dataset_path, "images")
         mask_path = os.path.join(dataset_path, term_name)
-        model_path = os.path.join(DIR, "models", term_name)
+        model_path = os.path.join(DIR, "models", str(cj.parameters.cytomine_id_project))
         os.makedirs(dataset_path, exist_ok=True)
         os.makedirs(images_path, exist_ok=True)
         os.makedirs(mask_path, exist_ok=True)
@@ -157,7 +155,7 @@ def main(argv):
                      ).upload()
 
         parameters_to_save = {'cytomine_term_id': cj.parameters.cytomine_term_id, 'cytomine_term_name': term_name}
-        parameters_file = joblib.dump(parameters_to_save, os.path.join(DIR, "parameters"), compress=0)[0]
+        parameters_file = joblib.dump(parameters_to_save, os.path.join(model_path, "parameters"), compress=0)[0]
 
         AttachedFile(cj.job,
                      domainIdent=cj.job.id,
@@ -170,4 +168,3 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-    time.sleep(10 * 60)
