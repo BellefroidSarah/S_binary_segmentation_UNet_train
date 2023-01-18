@@ -10,7 +10,6 @@ import os
 
 
 class DatasetKfold(torch.utils.data.Dataset):
-    # Works only if the size(img_dir) >= size(mask_dir)
     def __init__(self, img_dir, mask_dir, actual_fold, dataset="train", folds=5):
         super().__init__()
         self.imgs = img_dir
