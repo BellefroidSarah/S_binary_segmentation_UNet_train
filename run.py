@@ -63,7 +63,7 @@ def main(argv):
             filepath = os.path.join(images_path, name)
             filepaths.append(filepath)
 
-            img.download(filepath, override=False)
+            img.download(filepath, override=True)
 
             # Fetching image size
             pil_image = Image.open(filepath)
