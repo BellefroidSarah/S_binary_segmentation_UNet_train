@@ -5,12 +5,7 @@ import numpy as np
 import torch
 
 
-# https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
-def split(a, n):
-    k, m = divmod(len(a), n)
-    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
-
-
+# Selection of the loss function
 def select_loss_function(params):
     if params.parameters.loss_function == "Dice":
         return tgm.losses.DiceLoss()
@@ -22,7 +17,7 @@ def select_loss_function(params):
         return nn.CrossEntropyLoss()
 
 
-# One epoch training
+# One training epoch
 def train_model(model, loader, DEVICE, criterion, optimizer):
     model.train()
     train_loss = []
@@ -39,6 +34,7 @@ def train_model(model, loader, DEVICE, criterion, optimizer):
     return np.mean(train_loss)
 
 
+# One vlidation epoch
 def validate_model(model, loader, DEVICE, criterion):
     model.eval()
     with torch.no_grad():
@@ -50,3 +46,15 @@ def validate_model(model, loader, DEVICE, criterion):
             loss = criterion(outputs, masks.to(DEVICE))
             val_loss.append(loss.detach().item())
     return np.mean(val_loss)
+
+
+# Split a list 'a' into 'n' parts, returns a list of 'n' elements,
+# each being a sublist of 'a'. If len(a) is not divisible by 'n',
+# the sublists will have different lengths.
+# For example:
+# split([1, 2, 3], 2) = [[1, 2], [3]]
+# Source for this function :
+# https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+def split(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))

@@ -43,7 +43,7 @@ def main(argv):
         # Fetching annotations
         cj.job.update(progress=5, status_comment="Downloading images and annotations...")
         annotations = AnnotationCollection()
-        annotations.project = cj.cytomine_id_project
+        annotations.project = cj.parameters.cytomine_id_project
         annotations.showWKT = True
         annotations.showMeta = True
         annotations.term = cj.parameters.cytomine_term_id
@@ -90,12 +90,9 @@ def main(argv):
         # Best model of all folds
         best_model = UNET(3, 2)
         fold_loss = np.inf
-        best_fold = 0
 
         cj.job.update(progress=10, status_comment="Training...")
         for fold in range(cj.parameters.n_k_folds):
-            print("fold")
-            print(fold)
             # Creating datasets
             training_set = dataset.DatasetKfold(images_path,
                                                 mask_path,
@@ -132,18 +129,16 @@ def main(argv):
 
             cj.job.update(progress=10 + 10 * (fold + 1), status_comment="Starting fold " + str(fold + 1) + "...")
             for epoch in range(cj.parameters.n_epochs):
-                print(epoch)
                 # Train + Validate
                 _ = utils.train_model(model, training_loader, DEVICE, criterion, optimiser)
                 v_loss = utils.validate_model(model, validation_loader, DEVICE, criterion)
 
                 # Updating the overall best model
                 if v_loss < fold_loss:
-                    print(v_loss)
                     best_model = model
-                    best_fold = fold
                     fold_loss = v_loss
 
+        # Uploading model to cytomine
         cj.job.update(progress=95, status_comment="Finished training")
         model_filepath = os.path.join(model_path, "model.pth")
         torch.save(best_model.state_dict(), model_filepath)
@@ -154,6 +149,7 @@ def main(argv):
                      domainClassName='be.cytomine.processing.Job'
                      ).upload()
 
+        # Importing parameters needed for prediction to cytomine
         parameters_to_save = {'cytomine_term_id': cj.parameters.cytomine_term_id, 'cytomine_term_name': term_name}
         parameters_file = joblib.dump(parameters_to_save, os.path.join(model_path, "parameters"), compress=0)[0]
 

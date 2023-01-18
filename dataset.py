@@ -18,18 +18,21 @@ class DatasetKfold(torch.utils.data.Dataset):
         self.transform = transforms.ToTensor()
         self.folds = folds
 
+        # If no cross validation, cut dataset into 80%-20%
+        if folds == 1:
+            self.folds = 5
+
         self.files = [file for file in os.listdir(self.masks) if file in os.listdir(self.imgs)]
         self.files = list(utils.split(self.files, self.folds))
 
+        # K-fold cross validation, selecting current folds
         self.dataset = []
         if dataset == "train":
             for i in range(self.folds):
                 if i != actual_fold:
                     self.dataset = self.dataset + self.files[i]
-            print("Training set length: {}".format(len(self.dataset)))
         elif dataset == "validate":
             self.dataset = self.files[actual_fold]
-            print("Validation set length: {}".format(len(self.dataset)))
         random.shuffle(self.dataset)
 
     def __len__(self):
