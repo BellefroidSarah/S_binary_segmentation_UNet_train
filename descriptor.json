@@ -1,141 +1,177 @@
 {
-    "name": "binary_segmentation_UNet_train",
-    "description": "Training a UNet to do binary segmentation (test)",
-    "schema-version": "cytomine-0.1",
-    "inputs": [
-        {
-        	"id": "cytomine_host",
-      		"name": "Cytomine host",
-      		"set-by-server": true,
-      		"optional": false,
-      		"type": "String"
-    	},
-    	{
-			"id": "cytomine_public_key",
-			"name": "Cytomine public key",
-			"set-by-server": true,
-			"optional": false,
-			"type": "String"
-    	},
-    	{
-    		"id": "cytomine_private_key",
-			"name": "Cytomine private key",
-			"set-by-server": true,
-			"optional": false,
-			"type": "String"
-    	},
-		{
-			"id": "cytomine_id_project",
-			"name": "Cytomine project ID",
-			"set-by-server": true,
-			"optional": false,
-			"type": "Number"
-    	},
-		{
-			"id": "cytomine_id_software",
-			"name": "Cytomine software ID",
-			"set-by-server": true,
-			"optional": false,
-			"type": "Number"
-		},
-		{
-			"id": "cytomine_term_id",
-			"name": "Term ID",
-			"description": "The term of interest to segment",
-			"set-by-server": false,
-			"optional": false,
-			"type": "Domain",
-			"uri": "/api/ontology/$currentOntology$/term.json",
-			"uri-print-attribute": "name",
-			"uri-sort-attribute": "name"
-		},
-		{
-            "id": "loss_function",
-			"name": "Loss function",
-            "description": "Loss function used to train the network",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": "CrossEntropy",
-            "value-choices": ["CrossEntropy", "Dice", "Focal", "Tversky"],
-            "type": "String"
-		},
-
-        {
-            "id": "n_epochs",
-            "name": "Number of epochs",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 1000,
-            "type": "Number"
-        },
-        {
-            "id": "batch_size",
-			"name": "Batch size",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 4,
-            "type": "Number"
-        },
-		{
-            "id": "learning_rate",
-            "name": "Learning rate",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 0.0001,
-            "type": "Number"
-        },
-		{
-            "id": "weight_decay",
-            "name": "Weight decay",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 0,
-            "type": "Number"
-        },
-		{
-            "id": "n_k_folds",
-            "name": "K folds",
-			"description": "Number of folds to perform K-Fold Cross-Validation",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 5,
-            "type": "Number"
-        },
-		{
-			"id": "focal_alpha",
-			"name": "Alpha (Focal)",
-			"description": "Parameter of the focal loss function: alpha",
-			"set-by-server": false,
-			"optional": true,
-			"default-value": 0.8,
-			"type": "Number"
-		},
-		{
-            "id": "focal_gamma",
-            "name": "Gamma (Focal)",
-			"description": "Parameter of the focal loss function: gamma",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 2,
-            "type": "Number"
-        },
-		{
-            "id": "tversky_alpha",
-            "name": "Alpha (Tversky)",
-			"description": "Parameter of the tversky loss function: alpha",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 0.7,
-            "type": "Number"
-        },
-		{
-            "id": "tversky_beta",
-            "name": "Beta (Tversky)",
-			"description": "Parameter of the tversky loss function: beta",
-            "set-by-server": false,
-            "optional": true,
-            "default-value": 0.3,
-            "type": "Number"
-        }
-    ]
+  "name": "binary_segmentation_UNet_train",
+  "description": "Training a UNet to do binary segmentation",
+  "schema-version": "cytomine-0.1",
+  "command-line": "python run.py --cytomine_host [CYTOMINE_HOST] --cytomine_public_key [CYTOMINE_PUBLIC_KEY] --cytomine_private_key [CYTOMINE_PRIVATE_KEY] --cytomine_id_project [CYTOMINE_ID_PROJECT] --cytomine_id_software [CYTOMINE_ID_SOFTWARE] --cytomine_term_id [CYTOMINE_TERM_ID] --loss_function [LOSS_FUNCTION] --n_epochs [N_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --weight_decay [WEIGHT_DECAY] --n_k_folds [N_K_FOLDS] --focal_alpha [FOCAL_ALPHA] --focal_gamma [FOCAL_GAMMA] --tversky_alpha [TVERSKY_ALPHA] --tversky_beta [TVERSKY_BETA]",
+  "container-image": {
+    "image": "bellefroid/s_binary_segmentation_unet_train",
+    "type": "singularity"
+  },
+  "inputs": [
+    {
+      "id": "cytomine_host",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Cytomine host",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_public_key",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Cytomine public key",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_private_key",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Cytomine private key",
+      "set-by-server": true,
+      "optional": false,
+      "type": "String"
+    },
+    {
+      "id": "cytomine_id_project",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Cytomine project ID",
+      "set-by-server": true,
+      "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "cytomine_id_software",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Cytomine software ID",
+      "set-by-server": true,
+      "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "cytomine_term_id",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Term ID",
+      "description": "The term of interest to segment",
+      "set-by-server": false,
+      "optional": false,
+      "type": "Domain",
+      "uri": "/api/ontology/$currentOntology$/term.json",
+      "uri-print-attribute": "name",
+      "uri-sort-attribute": "name"
+    },
+    {
+      "id": "loss_function",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Loss function",
+      "description": "Loss function used to train the network",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": "CrossEntropy",
+      "value-choices": ["CrossEntropy", "Dice", "Focal", "Tversky"],
+      "type": "String"
+    },
+    {
+      "id": "n_epochs",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Number of epochs",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 1000,
+      "type": "Number"
+    },
+    {
+      "id": "batch_size",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Batch size",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 4,
+      "type": "Number"
+    },
+    {
+      "id": "learning_rate",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Learning rate",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 0.0001,
+      "type": "Number"
+    },
+    {
+      "id": "weight_decay",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Weight decay",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 0,
+      "type": "Number"
+    },
+    {
+      "id": "n_k_folds",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "K folds",
+      "description": "Number of folds to perform K-Fold Cross-Validation. K must be > 0. If K==1, no cross-validation, 80-20% dataset split.",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 5,
+      "type": "Number"
+    },
+    {
+      "id": "focal_alpha",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Alpha (Focal)",
+      "description": "Parameter of the focal loss function: alpha",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 0.8,
+      "type": "Number"
+    },
+    {
+      "id": "focal_gamma",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Gamma (Focal)",
+      "description": "Parameter of the focal loss function: gamma",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 2,
+      "type": "Number"
+    },
+    {
+      "id": "tversky_alpha",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Alpha (Tversky)",
+      "description": "Parameter of the tversky loss function: alpha",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 0.7,
+      "type": "Number"
+    },
+    {
+      "id": "tversky_beta",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Beta (Tversky)",
+      "description": "Parameter of the tversky loss function: beta",
+      "set-by-server": false,
+      "optional": true,
+      "default-value": 0.3,
+      "type": "Number"
+    }
+  ]
 }
