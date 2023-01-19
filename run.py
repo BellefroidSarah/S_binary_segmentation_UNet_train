@@ -55,31 +55,37 @@ def main(argv):
 
         # Fetching images
         images = ImageInstanceCollection().fetch_with_filter("project", cj.parameters.cytomine_id_project)
+        images_id = []
+        if cj.parameters.dataset_images == "all":
+            images_id = [image.id for image in images]
+        else:
+            images_id = [int(im_id) for im_id in cj.parameters.dataset_images.split(',')]
 
         # Downloading images and creating masks
         filepaths = list()
         for img in images:
-            name = img.originalFilename[:-4] + ".jpg"
-            filepath = os.path.join(images_path, name)
-            filepaths.append(filepath)
+            if img.id in images_id:
+                name = img.originalFilename[:-4] + ".jpg"
+                filepath = os.path.join(images_path, name)
+                filepaths.append(filepath)
 
-            img.download(filepath, override=True)
+                img.download(filepath, override=True)
 
-            # Fetching image size
-            pil_image = Image.open(filepath)
-            shape = (pil_image.height, pil_image.width)
+                # Fetching image size
+                pil_image = Image.open(filepath)
+                shape = (pil_image.height, pil_image.width)
 
-            # Creating masks
-            if annot_per_image[img.id]:
-                mask = np.zeros((shape[0], shape[1]))
-                for g in annot_per_image[img.id]:
-                    poly_points = []
-                    for x, y in g.exterior.coords[:]:
-                        poly_points.append([x, y])
-                    poly_points = np.array(poly_points)
-                    poly_points = np.int32(poly_points)
-                    cv2.fillPoly(mask, [poly_points], color=255)
-                cv2.imwrite(os.path.join(mask_path, name), np.flipud(mask))
+                # Creating masks
+                if annot_per_image[img.id]:
+                    mask = np.zeros((shape[0], shape[1]))
+                    for g in annot_per_image[img.id]:
+                        poly_points = []
+                        for x, y in g.exterior.coords[:]:
+                            poly_points.append([x, y])
+                        poly_points = np.array(poly_points)
+                        poly_points = np.int32(poly_points)
+                        cv2.fillPoly(mask, [poly_points], color=255)
+                    cv2.imwrite(os.path.join(mask_path, name), np.flipud(mask))
 
         device_name = "cpu"
         if torch.cuda.is_available():

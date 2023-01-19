@@ -1,8 +1,8 @@
 {
   "name": "binary_segmentation_UNet_train",
   "description": "Training a UNet to do binary segmentation",
-  "schema-version": "cytomine-0.1",
-  "command-line": "python run.py --cytomine_host [CYTOMINE_HOST] --cytomine_public_key [CYTOMINE_PUBLIC_KEY] --cytomine_private_key [CYTOMINE_PRIVATE_KEY] --cytomine_id_project [CYTOMINE_ID_PROJECT] --cytomine_id_software [CYTOMINE_ID_SOFTWARE] --cytomine_term_id [CYTOMINE_TERM_ID] --loss_function [LOSS_FUNCTION] --n_epochs [N_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --weight_decay [WEIGHT_DECAY] --n_k_folds [N_K_FOLDS] --focal_alpha [FOCAL_ALPHA] --focal_gamma [FOCAL_GAMMA] --tversky_alpha [TVERSKY_ALPHA] --tversky_beta [TVERSKY_BETA]",
+  "schema-version": "cytomine-1.1",
+  "command-line": "python run.py --cytomine_host [CYTOMINE_HOST] --cytomine_public_key [CYTOMINE_PUBLIC_KEY] --cytomine_private_key [CYTOMINE_PRIVATE_KEY] --cytomine_id_project [CYTOMINE_ID_PROJECT] --cytomine_id_software [CYTOMINE_ID_SOFTWARE] --cytomine_term_id [CYTOMINE_TERM_ID] --dateset_images [DATASET_IMAGES] --loss_function [LOSS_FUNCTION] --n_epochs [N_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --weight_decay [WEIGHT_DECAY] --n_k_folds [N_K_FOLDS] --focal_alpha [FOCAL_ALPHA] --focal_gamma [FOCAL_GAMMA] --tversky_alpha [TVERSKY_ALPHA] --tversky_beta [TVERSKY_BETA]",
   "container-image": {
     "image": "bellefroid/s_binary_segmentation_unet_train",
     "type": "singularity"
@@ -65,6 +65,19 @@
       "uri": "/api/ontology/$currentOntology$/term.json",
       "uri-print-attribute": "name",
       "uri-sort-attribute": "name"
+    },
+    {
+      "id": "dateset_images",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "Dataset images",
+      "description": "Images to use for training (and validating) the model",
+      "set-by-server": false,
+      "optional": false,
+      "type": "ListDomain",
+      "uri": "/api/project/$currentProject$/imageinstance.json",
+      "uri-print-attribute": "instanceFilename",
+      "uri-sort-attribute": "instanceFilename"
     },
     {
       "id": "loss_function",
