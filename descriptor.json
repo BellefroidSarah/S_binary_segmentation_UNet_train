@@ -67,7 +67,7 @@
       "uri-sort-attribute": "name"
     },
     {
-      "id": "dateset_images",
+      "id": "dataset_images",
       "value-key": "[@ID]",
       "command-line-flag": "--@id",
       "name": "Dataset images",
