@@ -2,7 +2,7 @@
   "name": "binary_segmentation_UNet_train",
   "description": "Training a UNet to do binary segmentation",
   "schema-version": "cytomine-0.1",
-  "command-line": "python run.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE CYTOMINE_TERM_ID DATASET_IMAGES LOSS_FUNCTION N_EPOCHS BATCH_SIZE LEARNING_RATE WEIGHT_DECAY N_K_FOLDS FOCAL_ALPHA FOCAL_GAMMA TVERSKY_ALPHA TVERSKY_BETA",
+  "command-line": "python run.py [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE] [CYTOMINE_TERM_ID] [DATASET_IMAGES] [LOSS_FUNCTION] [N_EPOCHS] [BATCH_SIZE] [LEARNING_RATE] [WEIGHT_DECAY] [N_K_FOLDS] [FOCAL_ALPHA] [FOCAL_GAMMA] [TVERSKY_ALPHA] [TVERSKY_BETA]",
   "container-image": {
     "image": "bellefroid/s_binary_segmentation_unet_train",
     "type": "singularity"
